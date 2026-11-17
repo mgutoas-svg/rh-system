@@ -1,0 +1,18 @@
+﻿{
+    "version":  "0.1.0",
+    "types":  "dist/index.d.ts",
+    "type":  "module",
+    "exports":  {
+                    "./*":  "./dist/*.js"
+                },
+    "name":  "@rh-system/shared",
+    "scripts":  {
+                    "dev":  "tsc --watch",
+                    "build":  "tsc"
+                },
+    "devDependencies":  {
+                            "zod":  "^3.25.0",
+                            "typescript":  "^5.3.0"
+                        },
+    "main":  "dist/index.js"
+}

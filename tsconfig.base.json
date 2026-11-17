@@ -1,0 +1,20 @@
+﻿{
+    "compilerOptions":  {
+                            "forceConsistentCasingInFileNames":  true,
+                            "resolveJsonModule":  true,
+                            "lib":  [
+                                        "ES2020"
+                                    ],
+                            "moduleResolution":  "bundler",
+                            "strict":  true,
+                            "target":  "ES2020",
+                            "esModuleInterop":  true,
+                            "skipLibCheck":  true,
+                            "module":  "ESNext",
+                            "paths":  {
+                                          "@/*":  [
+                                                      "./src/*"
+                                                  ]
+                                      }
+                        }
+}

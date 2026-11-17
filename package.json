@@ -1,0 +1,14 @@
+﻿{
+    "version":  "0.1.0",
+    "name":  "rh-system",
+    "devDependencies":  {
+                            "typescript":  "^5.3.0",
+                            "pnpm":  "^8.0.0",
+                            "turbo":  "^2.0.0"
+                        },
+    "type":  "module",
+    "workspaces":  [
+                       "packages/*"
+                   ],
+    "private":  true
+}

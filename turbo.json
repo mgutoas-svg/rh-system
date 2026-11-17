@@ -1,0 +1,27 @@
+﻿{
+    "globalDotEnv":  [
+                         ".env"
+                     ],
+    "pipeline":  {
+                     "build":  {
+                                   "dependsOn":  [
+                                                     "^build"
+                                                 ],
+                                   "outputs":  [
+                                                   "dist/",
+                                                   ".next/"
+                                               ]
+                               },
+                     "dev":  {
+                                 "cache":  false
+                             },
+                     "test":  {
+                                  "dependsOn":  [
+                                                    "^build"
+                                                ],
+                                  "outputs":  [
+
+                                              ]
+                              }
+                 }
+}

@@ -1,0 +1,16 @@
+﻿{
+    "compilerOptions":  {
+                            "declarationMap":  true,
+                            "declaration":  true,
+                            "sourceMap":  true
+                        },
+    "include":  [
+                    "src/**/*"
+                ],
+    "exclude":  [
+                    "dist",
+                    "node_modules",
+                    "tests"
+                ],
+    "extends":  "../../tsconfig.base.json"
+}
