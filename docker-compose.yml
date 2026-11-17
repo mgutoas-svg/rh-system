@@ -18,5 +18,20 @@ services:
       timeout: 5s
       retries: 5
 
+  api:
+    build: ./packages/api
+    container_name: rh-api
+    environment:
+      DATABASE_URL: postgresql://rh_user:rh_password@postgres:5432/rh_db
+      JWT_SECRET: dev-secret-change-in-prod
+      NODE_ENV: development
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: pnpm dev
+
 volumes:
   postgres_data:
