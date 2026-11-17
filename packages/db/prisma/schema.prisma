@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id @default(cuid())
+  email String @unique
+  passwordHash String
+  role  Role @default(FUNCIONARIO)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  RH
+  GERENTE
+  FUNCIONARIO
+}
+
+model Department {
+  id    String @id @default(cuid())
+  nome  String @unique
+  managerId String?
+  createdAt DateTime @default(now())
+  employees Employee[]
+}
+
+model Position {
+  id    String @id @default(cuid())
+  nome  String @unique
+  nivel String
+  salarioMinimo Float
+  salarioMaximo Float
+  createdAt DateTime @default(now())
+  employees Employee[]
+}
+
+model Employee {
+  id        String @id @default(cuid())
+  nome      String
+  cpf       String? @unique
+  email     String? @unique
+  telefone  String?
+  departmentId String
+  department Department @relation(fields: [departmentId], references: [id])
+  positionId String
+  position Position @relation(fields: [positionId], references: [id])
+  status    String @default("ativo")
+  salarioBase Float
+  dataContratacao DateTime
+  dataSaida DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  documents Document[]
+  payrollItems PayrollItem[]
+  leaveBalances LeaveBalance[]
+  evaluations Evaluation[]
+  contracts Contract[]
+}
+
+model Document {
+  id        String @id @default(cuid())
+  employeeId String
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  categoryId String
+  category DocumentCategory @relation(fields: [categoryId], references: [id])
+  nomeArquivo String
+  fileUrl String
+  extractionStatus String @default("pendente")
+  createdAt DateTime @default(now())
+}
+
+model DocumentCategory {
+  id    String @id @default(cuid())
+  nome  String @unique
+  documents Document[]
+}
+
+model PayrollRun {
+  id    String @id @default(cuid())
+  mes   Int
+  ano   Int
+  status String @default("rascunho")
+  totalPago Float @default(0)
+  createdAt DateTime @default(now())
+  items PayrollItem[]
+
+  @@unique([mes, ano])
+}
+
+model PayrollItem {
+  id    String @id @default(cuid())
+  runId String
+  run PayrollRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  employeeId String
+  employee Employee @relation(fields: [employeeId], references: [id])
+  salarioBase Float
+  descontos Json @default("{}")
+  adicionais Json @default("{}")
+  liquido Float
+  createdAt DateTime @default(now())
+}
+
+model LeaveType {
+  id    String @id @default(cuid())
+  nome  String @unique
+  diasAnuais Int
+  balances LeaveBalance[]
+  requests LeaveRequest[]
+}
+
+model LeaveBalance {
+  id        String @id @default(cuid())
+  employeeId String
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  leaveTypeId String
+  leaveType LeaveType @relation(fields: [leaveTypeId], references: [id])
+  diasAcumulados Int @default(0)
+  diasUsados Int @default(0)
+  diasSaldo Int @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([employeeId, leaveTypeId])
+}
+
+model LeaveRequest {
+  id        String @id @default(cuid())
+  employeeId String
+  leaveTypeId String
+  leaveType LeaveType @relation(fields: [leaveTypeId], references: [id])
+  dataInicio DateTime
+  dataFim DateTime
+  status String @default("pendente")
+  approvedBy String?
+  createdAt DateTime @default(now())
+}
+
+model Evaluation {
+  id        String @id @default(cuid())
+  employeeId String
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  avaliadorId String
+  periodo String
+  score Int
+  feedback String?
+  createdAt DateTime @default(now())
+}
+
+model Contract {
+  id        String @id @default(cuid())
+  employeeId String
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  tipo String
+  dataInicio DateTime
+  dataFim DateTime?
+  termos Json @default("{}")
+  fileUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
